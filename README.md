@@ -1,1 +1,1 @@
-# SmartHome
+# Smart Home rendszer Esp32 chippel
