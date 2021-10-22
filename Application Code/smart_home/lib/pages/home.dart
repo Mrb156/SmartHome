@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_home/pages/colorPicker.dart';
 import 'package:smart_home/pages/homePage.dart';
 
-import '../mediaQuery.dart';
 import 'heating.dart';
 
 class Home extends StatefulWidget {

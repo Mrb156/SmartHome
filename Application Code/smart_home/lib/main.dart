@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:smart_home/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -11,8 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Smart Home Control',
       home: Home(),
     );

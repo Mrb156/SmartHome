@@ -15,4 +15,19 @@ class DatabaseService {
       'Colors.Blue': _blue,
     });
   }
+
+  Future<void> updateBrightness(int value) async {
+    return await controlCollection
+        .doc('LED control')
+        .update({'Brightness': value});
+  }
+
+  Future getBrightness() async {
+    await controlCollection
+        .doc('LED control')
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      return snapshot.get('Brightness');
+    });
+  }
 }
