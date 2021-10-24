@@ -13,7 +13,7 @@
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-#define DELAYVAL 250
+#define DELAYVAL 800
 
 void setup() {
 
@@ -27,19 +27,55 @@ void setup() {
 
 void loop() {
   pixels.clear(); 
- // pixels.setBrightness(100);
+  pixels.setBrightness(10);
+  pixels.show();
+  for (int i=0;i<NUMPIXELS;i++){
+    pixels.setPixelColor(i,pixels.Color(255,0,0));
+    pixels.show();
+    }
+
+  pixels.clear();
+  
+/*for(int i=0;i<NUMPIXELS/2;i++){
+  pixels.setPixelColor(i,pixels.Color(255,255,255));
+  pixels.setPixelColor((NUMPIXELS-1-i),pixels.Color(255,255,255));
+  pixels.show();
+  
+  delay(DELAYVAL);
+  pixels.clear();
+  }*/
+  
+/*for(int i=0;i<NUMPIXELS;i+=2){
+  pixels.setPixelColor(i,pixels.Color(255,255,255));
   pixels.show();
 
+  delay(DELAYVAL);
+  pixels.clear();
+
+  }
+
+  for(int i=1;i<NUMPIXELS;i+=2){
+  pixels.setPixelColor(i,pixels.Color(255,255,255));
+  pixels.show();
+
+  delay(DELAYVAL);
+  pixels.clear();
+
+  }*/
+  
+  
  
-  for(int i=0; i<NUMPIXELS; i++) { 
+
+ 
+  /*for(int i=0; i<NUMPIXELS; i++) { 
       pixels.setPixelColor(i, pixels.Color(0,150,0));
       
 
     pixels.show();  
 
     delay(DELAYVAL);
-          pixels.clear(); 
+          pixels.clear(); */
  
-  }
+  
 
 }
