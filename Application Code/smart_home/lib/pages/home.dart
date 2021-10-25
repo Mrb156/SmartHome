@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home/pages/colorPicker.dart';
+import 'package:smart_home/pages/colorPicker2.dart';
 import 'package:smart_home/pages/homePage.dart';
 
 import 'heating.dart';
