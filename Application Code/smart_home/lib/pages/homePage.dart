@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/objects/buttons.dart';
+import 'package:smart_home/objects/cards.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,42 +13,56 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List secEvents = [];
+  // Map<dynamic, dynamic> secEvents
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: StreamBuilder(
+    return StreamBuilder(
       stream: realTimeDatabse()
           .databaseReference
           .child('Control/Security/Log')
           .onValue,
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
+          secEvents.clear();
           DataSnapshot dataValues = snapshot.data.snapshot;
-          Map<dynamic, dynamic> values = dataValues.value;
-          values.forEach((key, values) {
-            secEvents.add(values);
+          List values = dataValues.value;
+          values.forEach((value) {
+            secEvents.add(value);
           });
-          return Column(
-            children: [
-              AddEventButton(),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: secEvents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(secEvents[index].toString()),
-                      ),
-                    );
-                  })
-            ],
-          );
+          List secEventsRev = secEvents.reversed.toList();
+          return Scaffold(body:
+              LayoutBuilder(builder: (context, BoxConstraints constraints) {
+            return Expanded(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                child: Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Hello, Barna!',
+                          style: TextStyle(
+                              color: Colors.blue[900],
+                              fontSize: constraints.maxHeight * 0.1),
+                        )),
+                    ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: secEvents.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AlertCard(date: secEventsRev[index]);
+                        })
+                  ],
+                ),
+              ),
+            );
+          }));
         } else {
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
-    ));
+    );
   }
 }
