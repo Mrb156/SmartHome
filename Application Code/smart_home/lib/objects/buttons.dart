@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/services/realtimeDatabaseService.dart';
 
 class TurnOnOffButton extends StatefulWidget {
   Function onPressed;
   bool iconIsOn = true;
-  TurnOnOffButton({Key? key, required this.onPressed}) : super(key: key);
+  TurnOnOffButton({Key? key, required this.onPressed, required this.iconIsOn})
+      : super(key: key);
 
   @override
   State<TurnOnOffButton> createState() => _TurnOnOffButtonState();
@@ -55,6 +58,22 @@ class _LightSwitchState extends State<LightSwitch> {
     return Switch(
       onChanged: widget.onChagned(),
       value: widget.isSwitched,
+    );
+  }
+}
+
+class AddEventButton extends StatelessWidget {
+  int _currlogIndex = 0;
+  AddEventButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        realTimeDatabse().addEvent(DateTime.now().toString(), _currlogIndex);
+        _currlogIndex++;
+      },
+      child: const Text('Add event'),
     );
   }
 }
