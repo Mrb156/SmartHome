@@ -125,6 +125,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_circular_slider:
+    dependency: "direct main"
+    description:
+      name: flutter_circular_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.5.0"
   flutter_colorpicker:
     dependency: "direct main"
     description:
@@ -196,6 +203,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sleek_circular_slider:
+    dependency: "direct main"
+    description:
+      name: sleek_circular_slider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   source_span:
     dependency: transitive
     description:
@@ -254,4 +268,4 @@ packages:
     version: "2.1.1"
 sdks:
   dart: ">=2.14.0 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=2.0.0"

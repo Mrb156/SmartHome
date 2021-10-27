@@ -70,10 +70,37 @@ class AddEventButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        realTimeDatabse().addEvent(DateTime.now().toString(), _currlogIndex);
+        realTimeDatabase().addEvent(DateTime.now().toString(), _currlogIndex);
         _currlogIndex++;
       },
       child: const Text('Add event'),
     );
+  }
+}
+
+class SecOnOffButton extends StatefulWidget {
+  Function onPressed;
+  bool iconIsOn = true;
+  SecOnOffButton({Key? key, required this.onPressed, required this.iconIsOn})
+      : super(key: key);
+
+  @override
+  State<SecOnOffButton> createState() => _SecOnOffButtonState();
+}
+
+class _SecOnOffButtonState extends State<SecOnOffButton> {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+        onPressed: () {
+          setState(() {
+            widget.iconIsOn = !widget.iconIsOn;
+          });
+          widget.onPressed();
+        },
+        icon: Icon(widget.iconIsOn
+            ? Icons.verified_user_outlined
+            : Icons.privacy_tip_outlined),
+        label: Text(widget.iconIsOn ? 'On' : 'Off'));
   }
 }

@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class realTimeDatabse {
+class realTimeDatabase {
   final databaseReference = FirebaseDatabase.instance.reference();
   //functions for the LED
   int? br;
@@ -42,10 +42,33 @@ class realTimeDatabse {
   }
 
   //functions for security
-
+  bool? secState;
   Future addEvent(String time, int currlogIndex) async {
     await databaseReference
         .child('Control/Security/Log')
         .update({'${currlogIndex}': time});
+  }
+
+  Future checkSecState() async {
+    await databaseReference
+        .child('Control/Security/On')
+        .once()
+        .then((DataSnapshot snapshot) {
+      secState = snapshot.value;
+    });
+  }
+
+  Future turnSecOnOff() async {
+    await checkSecState();
+
+    await databaseReference
+        .child('Control/Security/')
+        .update({'On': !secState!});
+  }
+
+  //functions for heating
+
+  Future updateTemp(double temp) async {
+    await databaseReference.child('Control/Heating/').update({'Temp': temp});
   }
 }

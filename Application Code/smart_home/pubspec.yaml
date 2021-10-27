@@ -39,6 +39,8 @@ dependencies:
   flutter_colorpicker: ^0.6.0
   firebase_database: ^8.0.1
   firebase_core: ^1.8.0
+  sleek_circular_slider: ^2.0.1
+  flutter_circular_slider : 
 
 dev_dependencies:
   flutter_test:

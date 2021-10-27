@@ -21,11 +21,11 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
   void changeColor(Color color) {
     _pickerColor = color;
     _brightness = color.alpha;
-    realTimeDatabse().updateBrightness((color.alpha / 2.55).round());
+    realTimeDatabase().updateBrightness((color.alpha / 2.55).round());
   }
 
   void sendData() async {
-    await realTimeDatabse()
+    await realTimeDatabase()
         .updateColor(_pickerColor.red, _pickerColor.green, _pickerColor.blue);
   }
 
@@ -35,7 +35,7 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return FutureBuilder(
-              future: realTimeDatabse()
+              future: realTimeDatabase()
                   .databaseReference
                   .child('/Control/LED control/')
                   .once(),
@@ -73,7 +73,7 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
                       ),
                       TurnOnOffButton(
                           iconIsOn: _pickerColor.alpha == 0 ? false : true,
-                          onPressed: () => realTimeDatabse().turnLightOnOff()),
+                          onPressed: () => realTimeDatabase().turnLightOnOff()),
                       SendButton(onPressed: () => sendData()),
                       // LightSwitch(
                       //   onChagned: () =>
