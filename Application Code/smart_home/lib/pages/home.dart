@@ -14,8 +14,27 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //létrehozzuk a megfelelő változókat, és függvényeket
+  String _currentPage = "Home";
+  List<String> pageKeys = ["Color Picker", "Home", "Heating"];
+  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    "Color Picker": GlobalKey<NavigatorState>(),
+    "Home": GlobalKey<NavigatorState>(),
+    "Heating": GlobalKey<NavigatorState>(),
+  };
   int _selectedIndex = 1;
+
+  void _selectTab(String tabItem, int index) {
+    if (tabItem == _currentPage) {
+      _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _currentPage = pageKeys[index];
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  //létrehozzuk a megfelelő változókat, és függvényeket
   final List<Widget> _pages = const [ColorPickerPage(), HomePage(), Heating()];
 
   //ez a metódus vezérli a bottom navigation bar-t, hogy tudjunk váltogatni az oldalak között
@@ -27,26 +46,82 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: const Text(
-          'Smart Home Control',
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      onWillPop: () async {
+        final isFirstRouteInCurrentTab =
+            !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        if (isFirstRouteInCurrentTab) {
+          if (_currentPage != "Home") {
+            _selectTab("Home", 1);
+
+            return false;
+          }
+        }
+        // let system handle back button if we're on the first route
+        return isFirstRouteInCurrentTab;
+      },
+      child: Scaffold(
+        extendBody: true,
+        body: Stack(children: <Widget>[
+          _buildOffstageNavigator("Color Picker"),
+          _buildOffstageNavigator("Home"),
+          _buildOffstageNavigator("Heating"),
+        ]),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (int index) {
+            _selectTab(pageKeys[index], index);
+          },
+          currentIndex: _selectedIndex,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.colorize_outlined),
+              label: 'Color Picker',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.waves_outlined),
+              label: 'Heating',
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.colorize), label: 'Color Picker'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.waves), label: 'Heating'),
-        ],
+    );
+  }
+
+  Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage(
+      offstage: _currentPage != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
       ),
-      body: _pages[_selectedIndex],
+    );
+  }
+}
+
+class TabNavigator extends StatelessWidget {
+  TabNavigator({required this.navigatorKey, required this.tabItem});
+  final GlobalKey<NavigatorState> navigatorKey;
+  final String tabItem;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child = HomePage();
+    if (tabItem == "Color Picker")
+      child = ColorPickerPage();
+    else if (tabItem == "Home")
+      child = HomePage();
+    else if (tabItem == "Heating") child = Heating();
+
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (routeSettings) {
+        return MaterialPageRoute(builder: (context) => child);
+      },
     );
   }
 }

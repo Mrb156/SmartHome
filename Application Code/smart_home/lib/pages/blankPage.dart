@@ -6,6 +6,7 @@ class Blank extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      child: Text('TEszt'),
       onTap: () => Navigator.of(context).pop(),
     );
   }

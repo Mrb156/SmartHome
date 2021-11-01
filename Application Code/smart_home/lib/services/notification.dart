@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:smart_home/pages/home.dart';
 import 'package:smart_home/pages/homePage.dart';
 
+//TODO: az értesítések csak akkor jelennek meg, ha az alkalmazás meg van nyitva
 class NotificationApi {
   static final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
@@ -28,8 +29,10 @@ class NotificationApi {
         AndroidInitializationSettings('alert_icon');
     final InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
-    await _notifications.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
+    await _notifications.initialize(
+      initializationSettings,
+    );
+    // onSelectNotification: selectNotification);
   }
 
   void selectNotification(String? payload) async {
