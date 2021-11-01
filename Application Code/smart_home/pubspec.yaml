@@ -41,6 +41,8 @@ dependencies:
   firebase_core: ^1.8.0
   sleek_circular_slider: ^2.0.1
   flutter_circular_slider : 
+  flutter_local_notifications: ^9.0.2
+  rxdart: ^0.27.1
 
 dev_dependencies:
   flutter_test:

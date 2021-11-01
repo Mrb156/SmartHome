@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//a biztonsági értesítések kártyái
 class AlertCard extends StatefulWidget {
   String date;
   AlertCard({Key? key, required this.date}) : super(key: key);

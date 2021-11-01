@@ -4,6 +4,8 @@ import 'package:smart_home/pages/homePage.dart';
 
 import 'heating.dart';
 
+//ezen az oldalon van az app váza, ami körülfogja a megfelelő oldalakat
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -12,8 +14,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  //létrehozzuk a megfelelő változókat, és függvényeket
   int _selectedIndex = 1;
-  List<Widget> _pages = [ColorPickerPage(), HomePage(), Heating()];
+  final List<Widget> _pages = const [ColorPickerPage(), HomePage(), Heating()];
+
+  //ez a metódus vezérli a bottom navigation bar-t, hogy tudjunk váltogatni az oldalak között
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -26,15 +31,15 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Smart Home Control',
           style: TextStyle(color: Colors.black),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, //New
+        currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: [
+        items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.colorize), label: 'Color Picker'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

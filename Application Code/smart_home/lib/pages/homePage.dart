@@ -2,7 +2,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/objects/cards.dart';
+import 'package:smart_home/pages/blankPage.dart';
+import 'package:smart_home/pages/home.dart';
+import 'package:smart_home/services/notification.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
+
+//ebben a fájlban található a főoldal, amin megjelennek a biztonsági értesítések
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   List secEvents = [];
   bool secState = true;
 
+  //ez a függvény kérdezi le az adatbázisból hogy be van-e kapcsolva, vagy nem
+  //erre azért van szükség, hogy a bekapcsológomb megfelelően jelenjen meg megnyitáskor
   Future checkSecState() async {
     await realTimeDatabase()
         .databaseReference
@@ -25,14 +32,26 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //ez a metódus fut le minden megnyitáskor
   @override
   void initState() {
     super.initState();
     checkSecState();
+    NotificationApi().init();
+    listenNotifications();
   }
+
+  void listenNotifications() {
+    NotificationApi.onNotifications.stream.listen(onClickedNotification);
+  }
+
+  void onClickedNotification(String? payload) => Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => Blank()));
 
   @override
   Widget build(BuildContext context) {
+    //stream-et használunk, hogy minden értesítés egyből a listában is megjelenjen
+    //
     return StreamBuilder(
       stream: realTimeDatabase()
           .databaseReference
@@ -67,11 +86,23 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: constraints.maxWidth * 0.05),
-                        child: SecOnOffButton(
+                        child: TurnOnOffButton(
+                            iconOn: const Icon(Icons.verified_user_outlined),
+                            iconOff: const Icon(Icons.privacy_tip_outlined),
                             onPressed: () => realTimeDatabase().turnSecOnOff(),
                             iconIsOn: secState),
-                      )
+                      ),
                     ],
+                  ),
+                  ElevatedButton(
+                    child: Text('noti'),
+                    onPressed: () {
+                      NotificationApi.showNotification(
+                          id: 0,
+                          title: 'Helo',
+                          body: 'It\'s me',
+                          payload: 'ez.mi');
+                    },
                   ),
                   ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),

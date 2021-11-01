@@ -3,22 +3,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class realTimeDatabase {
+  //eltárolunk egy referenciát, mely a megfelelő helyet hivatkozza a Firebase-en
   final databaseReference = FirebaseDatabase.instance.reference();
-  //functions for the LED
-  int? br;
+  //fügvények melyekkel elérjük az adatbázist
 
+  //frissíti a LED csík színét
   Future updateColor(int _red, int _green, int _blue) async {
     return await databaseReference
         .child("Control/LED control/Colors")
         .update({'Red': _red, 'Green': _green, 'Blue': _blue});
   }
 
+  //frissíti a fényerőt a LED-en
   Future updateBrightness(int br) async {
     return await databaseReference
         .child("Control/LED control")
         .update({'Brightness': br});
   }
 
+  //lekérdezi a fényerőt, melyet a fényérzékelő küld az adatbázisba
+  int? br;
   Future getBrightness() async {
     await databaseReference
         .child('Control/LED control/Brightness')
@@ -28,6 +32,7 @@ class realTimeDatabase {
     });
   }
 
+  //ki, vagy bekapcsolja a LED-et szimplán a fényerő állításával
   Future turnLightOnOff() async {
     await getBrightness();
     if (br! != 0) {
@@ -41,7 +46,7 @@ class realTimeDatabase {
     }
   }
 
-  //functions for security
+  //tesztelés szempontjából hozzáad egy eseményt a biztonsági részhez az adatbázisban
   bool? secState;
   Future addEvent(String time, int currlogIndex) async {
     await databaseReference
@@ -49,6 +54,7 @@ class realTimeDatabase {
         .update({'${currlogIndex}': time});
   }
 
+  //lekéri, hogy be van-e kapcsolva a biztonsági rendszert
   Future checkSecState() async {
     await databaseReference
         .child('Control/Security/On')
@@ -58,6 +64,7 @@ class realTimeDatabase {
     });
   }
 
+  //ki-be kapcsolja a biztonsági rendszert
   Future turnSecOnOff() async {
     await checkSecState();
 
@@ -66,8 +73,7 @@ class realTimeDatabase {
         .update({'On': !secState!});
   }
 
-  //functions for heating
-
+  //frissíti a kívánt hőmérsékletet
   Future updateTemp(double temp) async {
     await databaseReference.child('Control/Heating/').update({'Temp': temp});
   }

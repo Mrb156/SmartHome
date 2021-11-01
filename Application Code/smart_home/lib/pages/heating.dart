@@ -5,6 +5,7 @@ import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 import 'dart:math' as math;
 
+//ebben a fájlban található a termosztát vezérlő oldala
 class Heating extends StatefulWidget {
   const Heating({Key? key}) : super(key: key);
 
@@ -15,7 +16,8 @@ class Heating extends StatefulWidget {
 class _HeatingState extends State<Heating> {
   double currTemp = 0;
   double temp = 0;
-
+  //lekérjük a legutóbb beállított kívánt hőmérsékletet
+  //
   Future getTemp() async {
     await realTimeDatabase()
         .databaseReference
@@ -35,9 +37,8 @@ class _HeatingState extends State<Heating> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        // backgroundColor: Colors.grey,
-        body: LayoutBuilder(
+    //stream-et haszálunk, hogy állandóan változó hőmérséklet megjelenjen
+    return Scaffold(body: LayoutBuilder(
       builder: (context, BoxConstraints constraints) {
         return StreamBuilder(
             stream: realTimeDatabase()

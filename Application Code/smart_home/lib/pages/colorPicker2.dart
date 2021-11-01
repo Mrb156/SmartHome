@@ -4,6 +4,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 
+//LED csík színének beállításának oldala
 class ColorPickerPage extends StatefulWidget {
   const ColorPickerPage({Key? key}) : super(key: key);
 
@@ -17,13 +18,15 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
   bool lightIsOn = true;
   bool _isSwitched = true;
   Map<dynamic, dynamic>? data;
-
+  //ez a metódus változtat a színen, amit megjelenít a color picker, valamint menti a színt, és a beállított fényerőt
+  //utóbbit fel is tölti realtime az adatbázisba, ezáltal a csúszkát használva folyamatosan változtatható
   void changeColor(Color color) {
     _pickerColor = color;
     _brightness = color.alpha;
     realTimeDatabase().updateBrightness((color.alpha / 2.55).round());
   }
 
+  //feltölti a színt az adatbázisba
   void sendData() async {
     await realTimeDatabase()
         .updateColor(_pickerColor.red, _pickerColor.green, _pickerColor.blue);
@@ -34,6 +37,7 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+          //itt elegendő un. future-t használni stream helyett, mivel nem kell folyamatos adatfolyamra számítani az adatbázisból
           return FutureBuilder(
               future: realTimeDatabase()
                   .databaseReference
@@ -72,6 +76,8 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
                         ),
                       ),
                       TurnOnOffButton(
+                          iconOn: const Icon(Icons.light_mode_outlined),
+                          iconOff: const Icon(Icons.nightlight_outlined),
                           iconIsOn: _pickerColor.alpha == 0 ? false : true,
                           onPressed: () => realTimeDatabase().turnLightOnOff()),
                       SendButton(onPressed: () => sendData()),
