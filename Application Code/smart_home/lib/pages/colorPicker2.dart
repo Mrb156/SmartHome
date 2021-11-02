@@ -5,6 +5,8 @@ import 'package:smart_home/objects/appBar.dart';
 import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 
+//TODO: manuális és automatikus átállás
+
 //LED csík színének beállításának oldala
 class ColorPickerPage extends StatefulWidget {
   const ColorPickerPage({Key? key}) : super(key: key);
