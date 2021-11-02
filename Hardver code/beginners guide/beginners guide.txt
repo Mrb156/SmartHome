@@ -1,0 +1,14 @@
+1. Download and install the application from this webpage:
+https://www.arduino.cc/en/software
+
+2. Go to Tools menu --> Port , and choose the avaible port for your device.
+If you do not have an input port, you can download it from this webpage: 
+https://sparks.gogo.co.nz/ch340.html
+Extract the zip file and install the software.
+
+3. In the application, go to Tools --> Board --> Board manager , and select your type of board.
+
+4. In Tools --> Manage libraries, open the library manager and  type the name of your arduino to download .
+To use a library in a sketch, select it from Sketch --> Import Library.
+
+5. Go to File --> Examples, so you can choose different basic codes for beginners.
