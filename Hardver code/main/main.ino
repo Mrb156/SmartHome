@@ -59,7 +59,9 @@ void temp(){
   Serial.println("°C ");
  
   delay(1000);
-  }
+  Firebase.setFloat(firebaseData,"/Control/Heating/currTemp", dht.readTemperature());
+}
+  
 
 void loop() {
   Change();
