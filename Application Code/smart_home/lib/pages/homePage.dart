@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/main.dart';
 import 'package:smart_home/objects/appBar.dart';
@@ -7,10 +8,15 @@ import 'package:smart_home/objects/cards.dart';
 import 'package:smart_home/pages/blankPage.dart';
 import 'package:smart_home/pages/colorPicker2.dart';
 import 'package:smart_home/pages/home.dart';
+import 'package:smart_home/services/localNotification.dart';
 import 'package:smart_home/services/notification.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 
 //ebben a fájlban található a főoldal, amin megjelennek a biztonsági értesítések
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +29,8 @@ class _HomePageState extends State<HomePage> {
   List secEvents = [];
   bool secState = true;
   int currLengthOfEvents = 0;
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   //ez a függvény kérdezi le az adatbázisból hogy be van-e kapcsolva, vagy nem
   //erre azért van szükség, hogy a bekapcsológomb megfelelően jelenjen meg megnyitáskor
@@ -41,16 +49,24 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     checkSecState();
-    NotificationApi().init();
-    listenNotifications();
-  }
 
-  void listenNotifications() {
-    NotificationApi.onNotifications.stream.listen(onClickedNotification);
-  }
+    LocalNotificationService.initialize(context);
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  void onClickedNotification(String? payload) => Navigator.of(context)
-      .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    FirebaseMessaging.instance.getInitialMessage().then((message) async {
+      if (message != null) {
+        // final routeFromMessage = message.data["route"];
+
+        // Navigator.of(context).pushNamed(routeFromMessage);
+      }
+    });
+
+    FirebaseMessaging.onMessage.listen((message) async {
+      LocalNotificationService.display(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,30 +87,22 @@ class _HomePageState extends State<HomePage> {
             secEvents.add(value);
           }
           List secEventsRev = secEvents.reversed.toList();
-          if (secEvents.length > currLengthOfEvents &&
-              currLengthOfEvents != 0) {
-            if (currLengthOfEvents != 0) {
-              NotificationApi.showNotification(
-                id: 0,
-                title: 'Új riasztás történt',
-                body: 'Időpont: ${secEvents[secEvents.length - 1]}',
-              );
-            }
-          }
+
           currLengthOfEvents = secEvents.length;
 
           return LayoutBuilder(
               builder: (context, BoxConstraints constraints) => Scaffold(
                   appBar: PreferredSize(
-                      child: const appBar(),
+                      child: appBar(),
                       preferredSize:
                           Size.fromHeight(constraints.maxHeight * 0.07)),
-                  body: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    child: Column(
-                      children: [
-                        Row(
+                  body: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: constraints.maxHeight * 0.05,
+                            top: constraints.maxHeight * 0.01),
+                        child: Row(
                           children: [
                             Align(
                                 alignment: Alignment.centerLeft,
@@ -118,25 +126,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        ElevatedButton(
-                          child: Text('noti'),
-                          onPressed: () {
-                            NotificationApi.showNotification(
-                              id: 0,
-                              title: 'Helo',
-                              body: 'It\'s me',
-                            );
-                          },
-                        ),
-                        ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: secEvents.length,
                             itemBuilder: (BuildContext context, int index) {
                               return AlertCard(date: secEventsRev[index]);
-                            })
-                      ],
-                    ),
+                            }),
+                      )
+                    ],
                   )));
         } else {
           return const Center(child: CircularProgressIndicator());

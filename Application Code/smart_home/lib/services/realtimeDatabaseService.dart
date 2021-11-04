@@ -1,5 +1,5 @@
 // import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class realTimeDatabase {
@@ -32,6 +32,23 @@ class realTimeDatabase {
     });
   }
 
+  //be van-e kapcsolva az automatika
+  bool? autoOn;
+  Future getAuto() async {
+    await databaseReference
+        .child('Control/LED control/Auto')
+        .once()
+        .then((DataSnapshot snapshot) => autoOn = snapshot.value);
+  }
+
+  //módváltás auto => manuális
+  Future changeMode() async {
+    await getAuto();
+    await databaseReference
+        .child('Control/LED control')
+        .update({'Auto': !autoOn!});
+  }
+
   //ki, vagy bekapcsolja a LED-et szimplán a fényerő állításával
   Future turnLightOnOff() async {
     await getBrightness();
@@ -47,7 +64,6 @@ class realTimeDatabase {
   }
 
   //tesztelés szempontjából hozzáad egy eseményt a biztonsági részhez az adatbázisban
-  bool? secState;
   Future addEvent(String time, int currlogIndex) async {
     await databaseReference
         .child('Control/Security/Log')
@@ -55,6 +71,7 @@ class realTimeDatabase {
   }
 
   //lekéri, hogy be van-e kapcsolva a biztonsági rendszert
+  bool? secState;
   Future checkSecState() async {
     await databaseReference
         .child('Control/Security/On')
@@ -67,10 +84,28 @@ class realTimeDatabase {
   //ki-be kapcsolja a biztonsági rendszert
   Future turnSecOnOff() async {
     await checkSecState();
-
     await databaseReference
         .child('Control/Security/')
         .update({'On': !secState!});
+  }
+
+  //be van-e kapcsolva a termosztát
+  bool? tempState;
+  Future checkTempState() async {
+    await databaseReference
+        .child('Control/Heating/On')
+        .once()
+        .then((DataSnapshot snapshot) {
+      tempState = snapshot.value;
+    });
+  }
+
+  //ki-be kapcsolja a termosztátot
+  Future turnTempOnOff() async {
+    await checkTempState();
+    await databaseReference
+        .child('Control/Heating/')
+        .update({'On': !tempState!});
   }
 
   //frissíti a kívánt hőmérsékletet

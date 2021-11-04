@@ -1,13 +1,14 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:smart_home/pages/homePage.dart';
 import 'package:smart_home/services/notification.dart';
 
 //a main a program belépő pontja
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  NotificationApi().init();
   runApp(const MyApp());
 }
 

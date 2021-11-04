@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:smart_home/objects/appBar.dart';
+import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 import 'dart:math' as math;
 
@@ -17,6 +18,7 @@ class Heating extends StatefulWidget {
 class _HeatingState extends State<Heating> {
   double currTemp = 0;
   double temp = 0;
+  bool? tempState;
   //lekérjük a legutóbb beállított kívánt hőmérsékletet
   //
   Future getTemp() async {
@@ -29,11 +31,22 @@ class _HeatingState extends State<Heating> {
     });
   }
 
+  Future checkTempState() async {
+    await realTimeDatabase()
+        .databaseReference
+        .child('Control/Heating/On')
+        .once()
+        .then((DataSnapshot snapshot) {
+      tempState = snapshot.value;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getTemp();
+    checkTempState();
   }
 
   @override
@@ -94,6 +107,13 @@ class _HeatingState extends State<Heating> {
                               '$currTemp',
                               style: TextStyle(
                                   fontSize: constraints.maxHeight * 0.03),
+                            ),
+                            TurnOnOffButton(
+                              iconIsOn: tempState == true ? false : true,
+                              iconOn: Icon(Icons.thermostat_outlined),
+                              iconOff: Icon(Icons.close_outlined),
+                              onPressed: () =>
+                                  realTimeDatabase().turnTempOnOff(),
                             )
                           ],
                         ),

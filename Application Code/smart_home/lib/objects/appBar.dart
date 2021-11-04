@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class appBar extends StatelessWidget {
-  const appBar({Key? key}) : super(key: key);
+  dynamic leading;
+  final List<Widget>? actions;
+  appBar({Key? key, this.leading, this.actions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +14,8 @@ class appBar extends StatelessWidget {
         'Smart Home Control',
         style: TextStyle(color: Colors.black),
       ),
+      leading: leading,
+      actions: actions,
     );
   }
 }
