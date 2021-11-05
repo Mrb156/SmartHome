@@ -15,6 +15,7 @@ A **Heating** oldalon egy hőmérsékletszabályzó, és a jelenlegi hőmérsék
 ## Forráskód struktúrája, és kódleírás
 A *lib* mappában találhatóak a fájlok, és mappák, amik nekünk szükségesek. Ezeket fogom felsorolni elérési útjuk szerint.  
 Az egyik legfontosabb fájl a projektben a *pubspec.yaml*. Ez tartalmazza az összes külső beimportálandó könyvtárakat, melyeket az app igénybe vesz. Ez a projekt mappájában, kívül található.
+
 #### pubspec.yaml
 Most csak azokat a könyvtárakat jelenítem meg, melyek nem automatikusan, a projekt létrehozásakor kerülnek bele a fájlba, hanem manuálisan kell beírni őket. A nevük mellett a verziók láthatók. Ezek beimportálása a megfelelő fájlba, mindig a fájl legtetején történjen meg!
 ```
@@ -183,7 +184,6 @@ Ez frissíti a kívánt hőmérsékletet a termosztáthoz az adatbázisban.
     await databaseReference.child('Control/Heating/').update({'Temp': temp});
   }
 ```
-**Meg kell még említeni a fő fájlban, hogy miket kell importálni, beszélni kell a pubspec-ről.**
 
 ### /lib/pages
 Ebben a mappában találhatóak azoka fájlok, melyekben az alkalmazásban megjelenő oldalak vannak. Az app struktúráját tekintve három fő oldalra tagolható. A **Color Picker**, a **Home**, és a **Heating**. Ezek működése a felhasználói dokumentációban van részletezve, most a leíró kódjukra koncentrálok. 
@@ -197,3 +197,5 @@ Ebben található az app kezdőoldala, mely megjelenik megnyitás után. Itt a b
 
 #### heating.dart
 A termosztátot ez a fájl tartalmazza. Mutatja a jelenlegi hőmérsékletet, és beállítható a kívánt érték is. Amint a hőmérséklet eléri ezt a kívánt értéket, az alkalmazás értesítést küld. A rendzser képes a páratartalmat is mérni, és ezt is megjeleníti a felület.
+
+## Push értesítések működése

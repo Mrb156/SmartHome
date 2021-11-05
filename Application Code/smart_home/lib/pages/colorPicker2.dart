@@ -58,7 +58,9 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Scaffold(
         appBar: PreferredSize(
-          child: appBar(),
+          child: appBar(
+            title: 'Color Picker',
+          ),
           preferredSize: Size.fromHeight(constraints.maxHeight * 0.07),
         ),
         body:

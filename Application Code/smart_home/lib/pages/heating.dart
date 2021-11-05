@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:flutter_circular_slider/flutter_circular_slider.dart';
+import 'package:smart_home/colors.dart';
 import 'package:smart_home/objects/appBar.dart';
 import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
@@ -54,8 +54,11 @@ class _HeatingState extends State<Heating> {
     //stream-et haszálunk, hogy állandóan változó hőmérséklet megjelenjen
     return LayoutBuilder(
         builder: (context, BoxConstraints constraints) => Scaffold(
+              // backgroundColor: Colors.white,
               appBar: PreferredSize(
-                child: appBar(),
+                child: appBar(
+                  title: '',
+                ),
                 preferredSize: Size.fromHeight(constraints.maxHeight * 0.07),
               ),
               body: StreamBuilder(
@@ -70,22 +73,39 @@ class _HeatingState extends State<Heating> {
                       return Center(
                         child: Column(
                           children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.all(constraints.maxHeight * 0.04),
-                              child: Title(
-                                  color: Colors.black,
-                                  child: Text(
-                                    'Hőmérsékélet vezérlés',
-                                    style: TextStyle(
-                                        fontSize: constraints.maxHeight * 0.04),
-                                  )),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    constraints.maxHeight * 0.02),
+                                child: Title(
+                                    color: Colors.black,
+                                    child: Text(
+                                      'Hőmérsékélet',
+                                      style: TextStyle(
+                                          fontSize:
+                                              constraints.maxHeight * 0.04),
+                                    )),
+                              ),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: constraints.maxHeight * 0.02),
                               child: SleekCircularSlider(
                                   appearance: CircularSliderAppearance(
+                                      customWidths: CustomSliderWidths(
+                                          trackWidth:
+                                              constraints.maxWidth * 0.002,
+                                          progressBarWidth:
+                                              constraints.maxWidth * 0.014,
+                                          handlerSize:
+                                              constraints.maxWidth * 0.03),
+                                      customColors: CustomSliderColors(
+                                          trackColor: MyColors.middleGrey,
+                                          progressBarColor:
+                                              MyColors.primaryBlack,
+                                          dotColor: MyColors.primaryBlack,
+                                          hideShadow: true),
                                       angleRange: 360,
                                       size: constraints.maxWidth * 0.7,
                                       infoProperties: InfoProperties(
