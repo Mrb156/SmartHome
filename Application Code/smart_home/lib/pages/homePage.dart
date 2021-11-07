@@ -69,41 +69,14 @@ class _HomePageState extends State<HomePage> {
 
           return LayoutBuilder(
               builder: (context, BoxConstraints constraints) => Scaffold(
-                  appBar: PreferredSize(
-                      child: appBar(
-                        title: '',
-                      ),
-                      preferredSize:
-                          Size.fromHeight(constraints.maxHeight * 0.07)),
-                  body: Column(
+                      body: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(
-                            bottom: constraints.maxHeight * 0.05,
-                            top: constraints.maxHeight * 0.01),
-                        child: Row(
-                          children: [
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'Hello, Barna!',
-                                  style: TextStyle(
-                                      color: Colors.blue[900],
-                                      fontSize: constraints.maxWidth * 0.1),
-                                )),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: constraints.maxWidth * 0.05),
-                              child: TurnOnOffButton(
-                                  iconOn:
-                                      const Icon(Icons.verified_user_outlined),
-                                  iconOff:
-                                      const Icon(Icons.privacy_tip_outlined),
-                                  onPressed: () =>
-                                      realTimeDatabase().turnSecOnOff(),
-                                  iconIsOn: secState),
-                            ),
-                          ],
+                        padding: EdgeInsets.all(constraints.maxHeight * 0.02),
+                        child: Text(
+                          'Biztonsági értesítések',
+                          style:
+                              TextStyle(fontSize: constraints.maxHeight * 0.03),
                         ),
                       ),
                       Expanded(

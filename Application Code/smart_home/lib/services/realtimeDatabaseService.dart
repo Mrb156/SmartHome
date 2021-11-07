@@ -90,13 +90,14 @@ class realTimeDatabase {
   }
 
   //be van-e kapcsolva a termosztát
-  bool? tempState;
+  bool? tempStateBool;
   Future checkTempState() async {
-    await databaseReference
+    await realTimeDatabase()
+        .databaseReference
         .child('Control/Heating/On')
         .once()
         .then((DataSnapshot snapshot) {
-      tempState = snapshot.value;
+      tempStateBool = snapshot.value;
     });
   }
 
@@ -105,7 +106,7 @@ class realTimeDatabase {
     await checkTempState();
     await databaseReference
         .child('Control/Heating/')
-        .update({'On': !tempState!});
+        .update({'On': !tempStateBool!});
   }
 
   //frissíti a kívánt hőmérsékletet

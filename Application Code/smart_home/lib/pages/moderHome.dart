@@ -25,7 +25,9 @@ class _MaterialHomeState extends State<MaterialHome> {
           child: Scaffold(
             appBar: PreferredSize(
               child: appBar(
-                tabBar: const TabBar(
+                tabBar: TabBar(
+                  labelStyle:
+                      TextStyle(fontSize: constraints.maxHeight * 0.025),
                   indicatorColor: Colors.transparent,
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/colors.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 
 //ebben a fájlban találhatóak a gombok, melyek megjelennek az app-ban
@@ -38,13 +39,37 @@ class _TurnOnOffButtonState extends State<TurnOnOffButton> {
 
 class SendButton extends StatelessWidget {
   final Function onPressed;
-  const SendButton({Key? key, required this.onPressed}) : super(key: key);
+  BoxConstraints constraints;
+  SendButton({Key? key, required this.constraints, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => onPressed(),
-      child: const Text('Set color'),
+    return GestureDetector(
+      onTap: () => onPressed(),
+      child: SizedBox(
+        height: constraints.maxHeight * 0.08,
+        width: constraints.maxWidth * 0.7,
+        child: Card(
+          elevation: 5,
+          color: MyColors.background,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(constraints.maxHeight * 0.01),
+              side: BorderSide(color: MyColors.middleGrey, width: 1)),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(constraints.maxHeight * 0.01),
+              child: Text(
+                'Set color',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: constraints.maxHeight * 0.03,
+                    color: MyColors.primaryBlack),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -23,9 +23,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: GoogleFonts.raleway().fontFamily,
-        accentColor: Colors.white,
-      ),
+          fontFamily: GoogleFonts.raleway().fontFamily,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          textTheme: TextTheme(
+            bodyText1: TextStyle(),
+            bodyText2: TextStyle(),
+          ).apply(bodyColor: MyColors.primaryBlack)),
       title: 'Smart Home Control',
       home: MaterialHome(),
     );

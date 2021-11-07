@@ -16,7 +16,7 @@ class appBar extends StatelessWidget {
       centerTitle: false,
       title: Text(
         title,
-        style: TextStyle(color: Colors.black, fontSize: 30),
+        style: TextStyle(color: Colors.black, fontSize: 40),
       ),
       leading: leading,
       actions: actions,

@@ -32,7 +32,7 @@ class ControlCard extends StatefulWidget {
   Function onSwitchChange;
   String primaryProp;
   String secondaryProp;
-  String primaryValue;
+  Widget primaryValue;
   String secondaryValue;
   Widget? wichPageToOpen;
   bool? only = false;
@@ -69,30 +69,29 @@ class _ControlCardState extends State<ControlCard> {
               borderRadius:
                   BorderRadius.circular(widget.constraints.maxHeight * 0.02),
               side: BorderSide(color: MyColors.middleGrey, width: 1)),
-          elevation: 0,
+          elevation: 5,
           color: MyColors.background,
-          child: Expanded(
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Align(alignment: Alignment.center, child: Text(widget.title)),
-                  SafeArea(
-                    child: Switch(
-                      activeTrackColor: MyColors.primaryBlack,
-                      inactiveTrackColor: MyColors.background,
-                      value: widget.switchValue,
-                      onChanged: (bool value) {
-                        setState(() {
-                          widget.switchValue = value;
-                          absorbed = !value;
-                        });
-                        widget.onSwitchChange;
-                      },
-                    ),
-                  )
-                ],
-              ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Align(alignment: Alignment.center, child: Text(widget.title)),
+                SafeArea(
+                  child: Switch(
+                    activeColor: Colors.white,
+                    activeTrackColor: MyColors.primaryBlack,
+                    inactiveTrackColor: MyColors.secondGrey,
+                    value: widget.switchValue,
+                    onChanged: (bool value) {
+                      setState(() {
+                        widget.switchValue = value;
+                        absorbed = !value;
+                      });
+                      widget.onSwitchChange;
+                    },
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -111,68 +110,110 @@ class _ControlCardState extends State<ControlCard> {
                 borderRadius:
                     BorderRadius.circular(widget.constraints.maxHeight * 0.02),
                 side: BorderSide(color: MyColors.middleGrey, width: 1)),
-            elevation: 0,
+            elevation: 5,
             color: MyColors.background,
-            child: Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                        alignment: Alignment.center, child: Text(widget.title)),
+                    SafeArea(
+                      child: Switch(
+                        activeColor: Colors.white,
+                        activeTrackColor: MyColors.primaryBlack,
+                        inactiveTrackColor: MyColors.secondGrey,
+                        value: widget.switchValue,
+                        onChanged: (bool value) {
+                          setState(() {
+                            widget.switchValue = value;
+                            absorbed = !value;
+                          });
+                          widget.onSwitchChange();
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: widget.constraints.maxHeight * 0.03),
+                  child: Row(
                     children: [
-                      Align(
-                          alignment: Alignment.center,
-                          child: Text(widget.title)),
-                      SafeArea(
-                        child: Switch(
-                          activeTrackColor: MyColors.primaryBlack,
-                          inactiveTrackColor: MyColors.background,
-                          value: widget.switchValue,
-                          onChanged: (bool value) {
-                            setState(() {
-                              widget.switchValue = value;
-                              absorbed = !value;
-                            });
-                            widget.onSwitchChange;
-                          },
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(widget.primaryProp),
+                            widget.primaryValue
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(widget.secondaryProp),
+                            Text(widget.secondaryValue),
+                          ],
                         ),
                       )
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        bottom: widget.constraints.maxHeight * 0.03),
-                    child: Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(widget.primaryProp),
-                                Text(widget.primaryValue)
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(widget.secondaryProp),
-                                Text(widget.secondaryValue),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           ),
         ),
       );
     }
+  }
+}
+
+class TempPropCard extends StatefulWidget {
+  BoxConstraints constraints;
+  String dataType;
+  String data;
+  TempPropCard(
+      {Key? key,
+      required this.constraints,
+      required this.dataType,
+      required this.data})
+      : super(key: key);
+
+  @override
+  _TempPropCardState createState() => _TempPropCardState();
+}
+
+class _TempPropCardState extends State<TempPropCard> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: widget.constraints.maxHeight * 0.2,
+        width: widget.constraints.maxWidth * 0.4,
+        child: Card(
+          color: MyColors.background,
+          shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(widget.constraints.maxHeight * 0.02),
+              side: BorderSide(color: MyColors.middleGrey, width: 1)),
+          elevation: 5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Jelenlegi ${widget.dataType}',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: widget.constraints.maxHeight * 0.02),
+              ),
+              Text(
+                widget.data,
+                style: TextStyle(fontSize: widget.constraints.maxHeight * 0.04),
+              ),
+            ],
+          ),
+        ));
   }
 }
