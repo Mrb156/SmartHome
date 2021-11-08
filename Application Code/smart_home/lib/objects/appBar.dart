@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 
 class appBar extends StatelessWidget {
   dynamic leading;
+  String title;
   final List<Widget>? actions;
-  appBar({Key? key, this.leading, this.actions}) : super(key: key);
+  TabBar? tabBar;
+  appBar(
+      {Key? key, this.leading, this.actions, required this.title, this.tabBar})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
+      backgroundColor: Colors.grey[50],
+      centerTitle: false,
       title: Text(
-        'Smart Home Control',
-        style: TextStyle(color: Colors.black),
+        title,
+        style: TextStyle(color: Colors.black, fontSize: 40),
       ),
       leading: leading,
       actions: actions,
+      elevation: 0,
+      bottom: tabBar,
     );
   }
 }

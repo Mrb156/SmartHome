@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:smart_home/colors.dart';
 import 'package:smart_home/objects/appBar.dart';
 import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
@@ -58,7 +59,20 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) => Scaffold(
         appBar: PreferredSize(
-          child: appBar(),
+          child: appBar(
+            leading: Padding(
+              padding: EdgeInsets.only(left: constraints.maxWidth * 0.03),
+              child: GestureDetector(
+                child: Icon(
+                  Icons.arrow_back_outlined,
+                  color: MyColors.primaryBlack,
+                  size: constraints.maxHeight * 0.04,
+                ),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ),
+            title: '',
+          ),
           preferredSize: Size.fromHeight(constraints.maxHeight * 0.07),
         ),
         body:
@@ -79,55 +93,72 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
                       (data!['Colors']['Blue']),
                     );
                     // _brightness = (data!['Brightness'] * 2.55).round();
-                    return AbsorbPointer(
-                      absorbing: false,
-                      child: Column(
-                        children: [
-                          AbsorbPointer(
-                            absorbing: false,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: constraints.maxHeight * 0.02),
-                              child: ColorPicker(
-                                displayThumbColor: true,
-                                pickerColor: _pickerColor,
-                                onColorChanged: changeColor,
-                                showLabel: false,
-                                pickerAreaHeightPercent: 1,
-                                colorPickerWidth: constraints.maxHeight * 0.45,
-                                enableAlpha: true,
-                                pickerAreaBorderRadius: BorderRadius.circular(
-                                    constraints.maxHeight * 0.03),
-                              ),
-                            ),
+                    return Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding:
+                                EdgeInsets.all(constraints.maxHeight * 0.02),
+                            child: Title(
+                                color: Colors.black,
+                                child: Text(
+                                  'Color Picker',
+                                  style: TextStyle(
+                                      fontSize: constraints.maxHeight * 0.04),
+                                )),
                           ),
-                          TurnOnOffButton(
-                              iconOn: const Icon(Icons.light_mode_outlined),
-                              iconOff: const Icon(Icons.nightlight_outlined),
-                              iconIsOn: _pickerColor.alpha == 0 ? false : true,
-                              onPressed: () {
-                                realTimeDatabase().turnLightOnOff();
-                                setState(() {
-                                  pageAbsorbed =
-                                      _pickerColor.alpha == 0 ? false : true;
-                                });
-                              }),
-                          SendButton(onPressed: () => sendData()),
-                          // TODO: szín beállítása
-                          TurnOnOffButton(
-                            iconOff: const Icon(Icons.color_lens_outlined),
-                            iconOn: const Icon(Icons.brightness_6_outlined),
-                            iconIsOn: autoOn!,
-                            onPressed: () {
-                              realTimeDatabase().changeMode();
-                              getAuto();
-                              setState(() {
-                                pickerAbsorbed = autoOn == true ? true : false;
-                              });
-                            },
-                          )
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: constraints.maxHeight * 0.02),
+                          child: ColorPicker(
+                            displayThumbColor: true,
+                            pickerColor: _pickerColor,
+                            onColorChanged: changeColor,
+                            showLabel: false,
+                            pickerAreaHeightPercent: 1,
+                            colorPickerWidth: constraints.maxWidth * 0.75,
+                            enableAlpha: true,
+                            pickerAreaBorderRadius: BorderRadius.circular(
+                                constraints.maxHeight * 0.03),
+                          ),
+                        ),
+                        SendButton(
+                          onPressed: () => sendData(),
+                          constraints: constraints,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(constraints.maxHeight * 0.05),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                data!['Auto']
+                                    ? 'Turn auto on'
+                                    : 'Turn auto off',
+                                style: TextStyle(
+                                    fontSize: constraints.maxHeight * 0.03),
+                              ),
+                              Transform.scale(
+                                scale: constraints.maxWidth * 0.0045,
+                                child: Switch(
+                                  activeColor: Colors.white,
+                                  activeTrackColor: MyColors.primaryBlack,
+                                  inactiveTrackColor: MyColors.secondGrey,
+                                  value: autoOn!,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      autoOn = value;
+                                    });
+                                    realTimeDatabase().changeMode();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     );
                   } else {
                     return const Center(
