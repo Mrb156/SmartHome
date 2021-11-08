@@ -16,9 +16,11 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 DHT dht(DHTPIN, DHTTYPE);
 
 //hálózat beállítása
-const char* ssid = "Vodafone-4DBE";
-const char* password = "Cc5fvxrdsuEr";
+const char* ssid2 = "Vodafone-4DBE";
+const char* password2 = "Cc5fvxrdsuEr";
 
+const char* ssid = "Galaxy S10 MrB";
+const char* password = "Morvai15";
 FirebaseData firebaseData;
 
 //sftw led beállítás
@@ -117,8 +119,9 @@ void led(){
 
   for(int i=0; i<NUMPIXELS; i++) {
     pixels.setPixelColor(i, pixels.Color(redValue, greenValue, blueValue));
+    pixels.show();
   }
-  pixels.show();
+
 }
 
 void Change() {
