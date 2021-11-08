@@ -7,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_home/pages/homePage.dart';
 import 'package:smart_home/pages/moderHome.dart';
 import 'package:smart_home/services/notification.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 //a main a program belépő pontja
 void main() async {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          fontFamily: GoogleFonts.raleway().fontFamily,
+          // fontFamily: GoogleFonts.raleway().fontFamily,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           textTheme: TextTheme(
