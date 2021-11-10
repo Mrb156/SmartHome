@@ -9,10 +9,8 @@ admin.initializeApp(functions.config().firebase);
 exports.helloWorld = functions.database.ref('notification/status').onUpdate(evt => {
     const payload = {
         notification: {
-            title: 'VISITOR ALERT',
-            body: 'Someone is standing infront of your door',
-            badge: '1',
-            sound: 'default'
+            title: 'Biztonsági értesítés',
+            body: 'A szenzor mozgást érzékelt', 
         }
     };
 
