@@ -1,4 +1,4 @@
-int pirPin = 5;// pirPin változó 7-es láb, PIR sensor
+int pirPin = 13;// pirPin változó 7-es láb, PIR sensor
 void setup()
 {
 pinMode(pirPin, INPUT);//a 7-es láb bemenet

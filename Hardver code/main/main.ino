@@ -40,11 +40,15 @@ int sensorMin = 1023;
 int sensorMax = 0; 
 int sensorValue = 0;
 
+//security változók
+bool isSecOn = true;
+int pirPin = 13;
+
 
 unsigned long sendDataPrevMillis1;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.begin(ssid, password);
   Firebase.begin("smarthome-335e5-default-rtdb.europe-west1.firebasedatabase.app", "OMwMInlPA7HzxP8Nu1xcC6pmevQUrDQAhhBKRCdy");
   while (WiFi.status() != WL_CONNECTED) {
@@ -84,7 +88,23 @@ void setup() {
   else{
     LEDisOn = false;
   }
+  pinMode(pirPin, INPUT);
+  if(Firebase.getBool(firebaseData, "/Control/Security/On") != isSecOn){
+    isSecOn = firebaseData.boolData();
+  }
   
+}
+int secIndex = 0;
+void Security(){
+  if (digitalRead(pirPin) == HIGH)//ha pirPin állapota magas szinten van akkor
+  {
+    Firebase.setString(firebaseData, "/notification/status", "motion");  
+    Serial.println("alert");
+  }
+  else{
+    Firebase.setString(firebaseData, "/notification/status", "no motion");  
+  }
+
 }
 
 void temp(){
@@ -124,7 +144,7 @@ void led(){
 
 }
 
-void Change() {
+void Check() {
   if(Firebase.getBool(firebaseData,"/Control/LED control/Auto")){
     if(firebaseData.boolData() == true){
       isAuto = true;
@@ -150,7 +170,9 @@ void Change() {
     if (Firebase.getInt(firebaseData, "/Control/LED control/Brightness") != brightness) {
       brightness = firebaseData.intData();
     }
-
+  if(Firebase.getBool(firebaseData, "/Control/Security/On") != isSecOn){
+    isSecOn = firebaseData.boolData();
+  }
 }
 
 void loop() {
@@ -162,11 +184,14 @@ void loop() {
       led();    
     }
   }
+  if(isSecOn){
+    Security();
+  }
   
     if (millis() - sendDataPrevMillis > 1500)
   {
     Serial.println("check");
-    Change();
+    Check();
     sendDataPrevMillis = millis();
   }
 }
