@@ -98,13 +98,11 @@ int secIndex = 0;
 void Security(){
   if (digitalRead(pirPin) == HIGH)//ha pirPin állapota magas szinten van akkor
   {
-    Firebase.setString(firebaseData, "/notification/status", "motion");  
+    if(Firebase.getBool(firebaseData, "/notification/status")){
+    Firebase.setBool(firebaseData, "/notification/status", !firebaseData.boolData());  
     Serial.println("alert");
+    }
   }
-  else{
-    Firebase.setString(firebaseData, "/notification/status", "no motion");  
-  }
-
 }
 
 void temp(){
@@ -184,9 +182,12 @@ void loop() {
       led();    
     }
   }
-  if(isSecOn){
-    Security();
-  }
+  //if (millis() - sendDataPrevMillis > 1000){
+    if(isSecOn){
+      Security();
+    }
+   // sendDataPrevMillis = millis();
+ // }
   
     if (millis() - sendDataPrevMillis > 1500)
   {
