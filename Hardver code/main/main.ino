@@ -95,14 +95,17 @@ void setup() {
   
 }
 int secIndex = 0;
+char secState = digitalRead(pirPin) == HIGH ? 'h' : 'l';
 void Security(){
-  if (digitalRead(pirPin) == HIGH)//ha pirPin állapota magas szinten van akkor
+  
+  if (secState == 'l' and digitalRead(pirPin) == HIGH)
   {
     if(Firebase.getBool(firebaseData, "/notification/status")){
     Firebase.setBool(firebaseData, "/notification/status", !firebaseData.boolData());  
     Serial.println("alert");
     }
   }
+  secState = digitalRead(pirPin) == HIGH ? 'h' : 'l';
 }
 
 void temp(){
@@ -168,8 +171,14 @@ void Check() {
     if (Firebase.getInt(firebaseData, "/Control/LED control/Brightness") != brightness) {
       brightness = firebaseData.intData();
     }
-  if(Firebase.getBool(firebaseData, "/Control/Security/On") != isSecOn){
-    isSecOn = firebaseData.boolData();
+
+    if(Firebase.getBool(firebaseData,"/Control/Security/On")){
+    if(firebaseData.boolData() == true){
+      isSecOn = true;
+    }
+    else{
+      isSecOn = false;
+    }  
   }
 }
 
@@ -182,17 +191,22 @@ void loop() {
       led();    
     }
   }
-  //if (millis() - sendDataPrevMillis > 1000){
-    if(isSecOn){
-      Security();
-    }
-   // sendDataPrevMillis = millis();
- // }
+  else if(brightness == 0){
+    pixels.setBrightness(0);
+    pixels.show();
+  }
+  
+  if(isSecOn){
+    Security();
+  }
+
   
     if (millis() - sendDataPrevMillis > 1500)
   {
     Serial.println("check");
     Check();
     sendDataPrevMillis = millis();
+    Serial.println(brightness);
+    Serial.println(isSecOn);
   }
 }

@@ -75,8 +75,14 @@ class _ControlCardState extends State<ControlCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Align(alignment: Alignment.center, child: Text(widget.title)),
-                SafeArea(
+                Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      widget.title,
+                      textScaleFactor: 1.2,
+                    )),
+                Transform.scale(
+                  scale: widget.constraints.maxHeight * 0.002,
                   child: Switch(
                     activeColor: Colors.white,
                     activeTrackColor: MyColors.primaryBlack,
@@ -119,8 +125,10 @@ class _ControlCardState extends State<ControlCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Align(
-                        alignment: Alignment.center, child: Text(widget.title)),
-                    SafeArea(
+                        alignment: Alignment.center,
+                        child: Text(widget.title, textScaleFactor: 1.5)),
+                    Transform.scale(
+                      scale: widget.constraints.maxHeight * 0.002,
                       child: Switch(
                         activeColor: Colors.white,
                         activeTrackColor: MyColors.primaryBlack,
@@ -146,7 +154,7 @@ class _ControlCardState extends State<ControlCard> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(widget.primaryProp),
+                            Text(widget.primaryProp, textScaleFactor: 1.5),
                             widget.primaryValue
                           ],
                         ),
@@ -155,8 +163,14 @@ class _ControlCardState extends State<ControlCard> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text(widget.secondaryProp),
-                            Text(widget.secondaryValue),
+                            Text(
+                              widget.secondaryProp,
+                              textScaleFactor: 1.5,
+                            ),
+                            Text(
+                              widget.secondaryValue,
+                              textScaleFactor: 1.5,
+                            ),
                           ],
                         ),
                       )

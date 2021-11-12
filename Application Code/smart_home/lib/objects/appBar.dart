@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
+import 'package:smart_home/colors.dart';
 
 class appBar extends StatelessWidget {
   dynamic leading;
@@ -12,11 +15,11 @@ class appBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.transparent,
       centerTitle: false,
       title: Text(
         title,
-        style: TextStyle(color: Colors.black, fontSize: 40),
+        style: TextStyle(color: MyColors.primaryBlack, fontSize: 40),
       ),
       leading: leading,
       actions: actions,

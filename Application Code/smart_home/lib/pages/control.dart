@@ -30,6 +30,7 @@ class _ControlState extends State<Control> {
     return LayoutBuilder(
       builder: (context, BoxConstraints constraints) {
         return Scaffold(
+          backgroundColor: Colors.transparent,
           body: Row(
             children: [
               Expanded(
@@ -125,7 +126,10 @@ class _ControlState extends State<Control> {
                   ),
                 ),
               ),
-              Expanded(child: Container())
+              Expanded(
+                  child: Image(
+                image: AssetImage('assets/cloudsunny.png'),
+              ))
             ],
           ),
         );

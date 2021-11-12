@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home/colors.dart';
 import 'package:smart_home/objects/appBar.dart';
 import 'package:smart_home/pages/control.dart';
 import 'package:smart_home/pages/heating.dart';
@@ -22,33 +25,41 @@ class _MaterialHomeState extends State<MaterialHome> {
       builder: (context, BoxConstraints constraints) {
         return DefaultTabController(
           length: 2,
-          child: Scaffold(
-            appBar: PreferredSize(
-              child: appBar(
-                tabBar: TabBar(
-                  labelStyle:
-                      TextStyle(fontSize: constraints.maxHeight * 0.025),
-                  indicatorColor: Colors.transparent,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.grey,
-                  tabs: [
-                    Tab(
-                      text: 'Control',
-                    ),
-                    Tab(
-                      text: 'Security',
-                    )
+          child: Container(
+            decoration: linearDec,
+            child: Scaffold(
+              // backgroundColor: Colors.transparent,
+              appBar: PreferredSize(
+                child: appBar(
+                  tabBar: TabBar(
+                    labelStyle:
+                        TextStyle(fontSize: constraints.maxHeight * 0.025),
+                    indicatorColor: Colors.transparent,
+                    indicatorWeight: 0.1,
+                    labelColor: MyColors.primaryBlack,
+                    unselectedLabelColor: Colors.grey,
+                    tabs: [
+                      Tab(
+                        text: 'Control',
+                      ),
+                      Tab(
+                        text: 'Security',
+                      )
+                    ],
+                  ),
+                  title: 'Hello, Barna!',
+                ),
+                preferredSize: Size.fromHeight(constraints.maxHeight * 0.15),
+              ),
+              body: Stack(children: [
+                Image(image: AssetImage('assets/cloudsunny.png')),
+                TabBarView(
+                  children: [
+                    Control(),
+                    HomePage(),
                   ],
                 ),
-                title: 'Hello, Barna!',
-              ),
-              preferredSize: Size.fromHeight(constraints.maxHeight * 0.15),
-            ),
-            body: const TabBarView(
-              children: [
-                Control(),
-                HomePage(),
-              ],
+              ]),
             ),
           ),
         );

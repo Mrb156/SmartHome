@@ -56,7 +56,7 @@ class _HeatingState extends State<Heating> {
     //stream-et haszálunk, hogy állandóan változó hőmérséklet megjelenjen
     return LayoutBuilder(
         builder: (context, BoxConstraints constraints) => Scaffold(
-              // backgroundColor: Colors.white,
+              // backgroundColor: Colors.transparent,
               appBar: PreferredSize(
                 child: appBar(
                   leading: Padding(

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -57,115 +59,120 @@ class _ColorPickerPageState extends State<ColorPickerPage> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => Scaffold(
-        appBar: PreferredSize(
-          child: appBar(
-            leading: Padding(
-              padding: EdgeInsets.only(left: constraints.maxWidth * 0.03),
-              child: GestureDetector(
-                child: Icon(
-                  Icons.arrow_back_outlined,
-                  color: MyColors.primaryBlack,
-                  size: constraints.maxHeight * 0.04,
+      builder: (BuildContext context, BoxConstraints constraints) => Container(
+        decoration: linearDec,
+        child: Scaffold(
+          // backgroundColor: Colors.transparent,
+          appBar: PreferredSize(
+            child: appBar(
+              leading: Padding(
+                padding: EdgeInsets.only(left: constraints.maxWidth * 0.03),
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.arrow_back_outlined,
+                    color: MyColors.primaryBlack,
+                    size: constraints.maxHeight * 0.04,
+                  ),
+                  onTap: () => Navigator.of(context).pop(),
                 ),
-                onTap: () => Navigator.of(context).pop(),
               ),
+              title: '',
             ),
-            title: '',
+            preferredSize: Size.fromHeight(constraints.maxHeight * 0.07),
           ),
-          preferredSize: Size.fromHeight(constraints.maxHeight * 0.07),
-        ),
-        body:
-            //itt elegendő un. future-t használni stream helyett, mivel nem kell folyamatos adatfolyamra számítani az adatbázisból
-            FutureBuilder(
-                future: realTimeDatabase()
-                    .databaseReference
-                    .child('/Control/LED control/')
-                    .once(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DataSnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    data = snapshot.data!.value;
-                    _pickerColor = Color.fromARGB(
-                      (data!['Brightness'] * 2.55).round(),
-                      (data!['Colors']['Red']),
-                      (data!['Colors']['Green']),
-                      (data!['Colors']['Blue']),
-                    );
-                    // _brightness = (data!['Brightness'] * 2.55).round();
-                    return Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
+          body:
+              //itt elegendő un. future-t használni stream helyett, mivel nem kell folyamatos adatfolyamra számítani az adatbázisból
+              FutureBuilder(
+                  future: realTimeDatabase()
+                      .databaseReference
+                      .child('/Control/LED control/')
+                      .once(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DataSnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      data = snapshot.data!.value;
+                      _pickerColor = Color.fromARGB(
+                        (data!['Brightness'] * 2.55).round(),
+                        (data!['Colors']['Red']),
+                        (data!['Colors']['Green']),
+                        (data!['Colors']['Blue']),
+                      );
+                      // _brightness = (data!['Brightness'] * 2.55).round();
+                      return Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.all(constraints.maxHeight * 0.02),
+                              child: Title(
+                                  color: Colors.black,
+                                  child: Text(
+                                    'Color Picker',
+                                    style: TextStyle(
+                                        fontSize: constraints.maxHeight * 0.04),
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: constraints.maxHeight * 0.02),
+                            child: ColorPicker(
+                              displayThumbColor: true,
+                              pickerColor: _pickerColor,
+                              onColorChanged: changeColor,
+                              showLabel: false,
+                              pickerAreaHeightPercent: 1,
+                              colorPickerWidth: constraints.maxWidth * 0.75,
+                              enableAlpha: true,
+                              pickerAreaBorderRadius: BorderRadius.circular(
+                                  constraints.maxHeight * 0.03),
+                            ),
+                          ),
+                          SendButton(
+                            onPressed: () => sendData(),
+                            constraints: constraints,
+                          ),
+                          Padding(
                             padding:
-                                EdgeInsets.all(constraints.maxHeight * 0.02),
-                            child: Title(
-                                color: Colors.black,
-                                child: Text(
-                                  'Color Picker',
+                                EdgeInsets.all(constraints.maxHeight * 0.05),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  data!['Auto']
+                                      ? 'Turn auto on'
+                                      : 'Turn auto off',
                                   style: TextStyle(
-                                      fontSize: constraints.maxHeight * 0.04),
-                                )),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: constraints.maxHeight * 0.02),
-                          child: ColorPicker(
-                            displayThumbColor: true,
-                            pickerColor: _pickerColor,
-                            onColorChanged: changeColor,
-                            showLabel: false,
-                            pickerAreaHeightPercent: 1,
-                            colorPickerWidth: constraints.maxWidth * 0.75,
-                            enableAlpha: true,
-                            pickerAreaBorderRadius: BorderRadius.circular(
-                                constraints.maxHeight * 0.03),
-                          ),
-                        ),
-                        SendButton(
-                          onPressed: () => sendData(),
-                          constraints: constraints,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(constraints.maxHeight * 0.05),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                data!['Auto']
-                                    ? 'Turn auto on'
-                                    : 'Turn auto off',
-                                style: TextStyle(
-                                    fontSize: constraints.maxHeight * 0.03),
-                              ),
-                              Transform.scale(
-                                scale: constraints.maxWidth * 0.0045,
-                                child: Switch(
-                                  activeColor: Colors.white,
-                                  activeTrackColor: MyColors.primaryBlack,
-                                  inactiveTrackColor: MyColors.secondGrey,
-                                  value: autoOn!,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      autoOn = value;
-                                    });
-                                    realTimeDatabase().changeMode();
-                                  },
+                                      fontSize: constraints.maxHeight * 0.03),
                                 ),
-                              ),
-                            ],
+                                Transform.scale(
+                                  scale: constraints.maxWidth * 0.0045,
+                                  child: Switch(
+                                    activeColor: Colors.white,
+                                    activeTrackColor: MyColors.primaryBlack,
+                                    inactiveTrackColor: MyColors.secondGrey,
+                                    value: autoOn!,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        autoOn = value;
+                                      });
+                                      realTimeDatabase().changeMode();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                }),
+                        ],
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+        ),
       ),
     );
   }
