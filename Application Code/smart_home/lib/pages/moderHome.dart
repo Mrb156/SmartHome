@@ -52,7 +52,10 @@ class _MaterialHomeState extends State<MaterialHome> {
                 preferredSize: Size.fromHeight(constraints.maxHeight * 0.15),
               ),
               body: Stack(children: [
-                Image(image: AssetImage('assets/cloudsunny.png')),
+                // Positioned(
+                //     bottom: 200,
+                //     right: -400,
+                //     child: Image(image: AssetImage('assets/cloudsunny.png'))),
                 TabBarView(
                   children: [
                     Control(),

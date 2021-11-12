@@ -70,67 +70,102 @@ class _HomePageState extends State<HomePage> {
     // initializeDateFormatting('hu');
 
     return StreamBuilder(
-      stream: realTimeDatabase()
-          .databaseReference
-          .child('Control/Security/Log')
-          .onValue,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          secEvents.clear();
-          DataSnapshot dataValues = snapshot.data.snapshot;
-          List values = dataValues.value;
-          for (var value in values) {
-            secEvents.add(value);
+        stream: realTimeDatabase()
+            .databaseReference
+            .child('notification/status')
+            .onValue,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData &&
+              snapshot.data!.snapshot.value != currMotionDetect) {
+            currMotionDetect = snapshot.data!.snapshot.value;
+            realTimeDatabase().addEvent(
+                DateFormat.yMMMMEEEEd().add_Hm().format(DateTime.now()),
+                currLogIndex);
+            currLogIndex++;
           }
-          List secEventsRev = secEvents.reversed.toList();
-
-          currLengthOfEvents = secEvents.length;
-
-          return StreamBuilder(
-              stream: realTimeDatabase()
-                  .databaseReference
-                  .child('notification/status')
-                  .onValue,
-              builder: (context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.data!.snapshot.value != currMotionDetect) {
-                  currMotionDetect = snapshot.data!.snapshot.value;
-                  realTimeDatabase().addEvent(
-                      DateFormat.yMMMMEEEEd().add_Hm().format(DateTime.now()),
-                      currLogIndex);
-                  currLogIndex++;
-                }
-                return LayoutBuilder(
-                    builder: (context, BoxConstraints constraints) => Scaffold(
-                        backgroundColor: Colors.transparent,
-                        body: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.all(constraints.maxHeight * 0.02),
-                              child: Text(
-                                'Biztonsági értesítések',
-                                style: TextStyle(
-                                    fontSize: constraints.maxHeight * 0.03),
+          return LayoutBuilder(
+              builder: (context, BoxConstraints constraints) => Stack(
+                    children: [
+                      Positioned(
+                          bottom: 200,
+                          left: -213,
+                          child: Image(
+                              image: AssetImage('assets/cloudsunny.png'))),
+                      Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(
+                                    constraints.maxHeight * 0.02),
+                                child: Text(
+                                  'Biztonsági értesítések',
+                                  style: TextStyle(
+                                      fontSize: constraints.maxHeight * 0.03),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: secEvents.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return AlertCard(date: secEventsRev[index]);
-                                  }),
-                            )
-                          ],
-                        )));
-              });
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+                              Expanded(
+                                child: StreamBuilder<Object>(
+                                    stream: realTimeDatabase()
+                                        .databaseReference
+                                        .child('Control/Security/Log')
+                                        .onValue,
+                                    builder: (context, AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData) {
+                                        secEvents.clear();
+                                        DataSnapshot dataValues =
+                                            snapshot.data.snapshot;
+                                        List values = dataValues.value;
+                                        for (var value in values) {
+                                          secEvents.add(value);
+                                        }
+                                        List secEventsRev =
+                                            secEvents.reversed.toList();
+
+                                        currLengthOfEvents = secEvents.length;
+                                        return StreamBuilder<Object>(
+                                            stream: realTimeDatabase()
+                                                .databaseReference
+                                                .child('notification/status')
+                                                .onValue,
+                                            builder: (context,
+                                                AsyncSnapshot snapshot) {
+                                              if (snapshot.hasData &&
+                                                  snapshot.data!.snapshot
+                                                          .value !=
+                                                      currMotionDetect) {
+                                                currMotionDetect = snapshot
+                                                    .data!.snapshot.value;
+                                                realTimeDatabase().addEvent(
+                                                    DateFormat.yMMMMEEEEd()
+                                                        .add_Hm()
+                                                        .format(DateTime.now()),
+                                                    currLogIndex);
+                                                currLogIndex++;
+                                              }
+                                              return ListView.builder(
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: secEvents.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return AlertCard(
+                                                        date: secEventsRev[
+                                                            index]);
+                                                  });
+                                            });
+                                      } else {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                    }),
+                              )
+                            ],
+                          )),
+                    ],
+                  ));
+        });
   }
 }
