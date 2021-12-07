@@ -44,6 +44,10 @@ int sensorValue = 0;
 bool isSecOn = true;
 int pirPin = 13;
 
+//heating
+bool isHeatingOn = false;
+double currentTemp = 0;
+double wantedTemp = 0;
 
 unsigned long sendDataPrevMillis1;
 
@@ -109,15 +113,11 @@ void Security(){
 }
 
 void temp(){
-  Serial.print("Humidity: ");
-  Serial.print(dht.readHumidity());
-  Serial.print("%  Temperature: ");
-  Serial.print(dht.readTemperature());
-  Serial.println("°C ");
- 
-  delay(1000);
   Firebase.setFloat(firebaseData,"/Control/Heating/currTemp", dht.readTemperature());
- 
+  if (Firebase.getDouble(firebaseData, "/Control/Heating/Temp") != wantedTemp) {
+      wantedTemp = firebaseData.doubleData();
+  }
+  currentTemp = dht.readTemperature();
 }
   
 unsigned long sendDataPrevMillis = 0;
@@ -144,8 +144,47 @@ void led(){
   }
 
 }
+  
+int red = 0;
+int green = 0;
+int blue = 255;
+  
+void heating(){
+  red = 0;
+  green = 0;
+  blue = 255;
+  
+  delay(2000);
+  for(int i = green; i<=255; i++){
+    pixels.fill(pixels.Color(red, green, blue));
+    pixels.show();
+    green = i;
+    delay(15);
+  }
+ for(int i = blue; i>=0; i--){
+    pixels.fill(pixels.Color(red, green, blue));
+    pixels.show();
+    blue = i;
+    delay(15);
+  }
+  for(int i = red; i<=255; i++){
+    pixels.fill(pixels.Color(red, green, blue));
+    pixels.show();
+    red = i;
+    delay(15);
+  }
+   for(int i = green; i>=0; i--){
+    pixels.fill(pixels.Color(red, green, blue));
+    pixels.show();
+    green = i;
+    delay(15);
+  }
+  delay(2000);
+}
+
 
 void Check() {
+  temp();
   if(Firebase.getBool(firebaseData,"/Control/LED control/Auto")){
     if(firebaseData.boolData() == true){
       isAuto = true;
@@ -180,9 +219,20 @@ void Check() {
       isSecOn = false;
     }  
   }
+   if(Firebase.getBool(firebaseData,"/Control/Heating/On")){
+    if(firebaseData.boolData() == true){
+      isHeatingOn = true;
+    }
+    else{
+      isHeatingOn = false;
+    }  
+  }
 }
 
 void loop() {
+  if(isHeatingOn == true and currentTemp < wantedTemp){
+    heating();
+  }
   if(brightness != 0){
     if(isAuto == true){
       autoLed();
