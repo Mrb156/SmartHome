@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:alan_voice/alan_voice.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,14 +18,14 @@ import 'package:smart_home/pages/home.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class AlertPage extends StatefulWidget {
+  const AlertPage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _AlertPageState createState() => _AlertPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AlertPageState extends State<AlertPage> {
   List secEvents = [];
   bool secState = true;
   int currLengthOfEvents = 0;
@@ -152,6 +153,7 @@ class _HomePageState extends State<HomePage> {
                                                       (BuildContext context,
                                                           int index) {
                                                     return AlertCard(
+                                                        constraint: constraints,
                                                         date: secEventsRev[
                                                             index]);
                                                   });

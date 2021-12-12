@@ -76,12 +76,12 @@ class _MaterialHomeState extends State<MaterialHome> {
                 //     bottom: 200,
                 //     right: -400,
                 //     child: Image(image: AssetImage('assets/cloudsunny.png'))),
-                // TabBarView(
-                //   children: [
-                //     Control(),
-                //     AlertPage(),
-                //   ],
-                // ),
+                TabBarView(
+                  children: [
+                    Control(),
+                    AlertPage(),
+                  ],
+                ),
               ]),
             ),
           ),

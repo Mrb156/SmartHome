@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   }
 
   //létrehozzuk a megfelelő változókat, és függvényeket
-  final List<Widget> _pages = const [ColorPickerPage(), HomePage(), Heating()];
+  final List<Widget> _pages = const [ColorPickerPage(), AlertPage(), Heating()];
 
   //ez a metódus vezérli a bottom navigation bar-t, hogy tudjunk váltogatni az oldalak között
   void _onItemTapped(int index) {
@@ -110,11 +110,11 @@ class TabNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = HomePage();
+    Widget child = AlertPage();
     if (tabItem == "Color Picker")
       child = ColorPickerPage();
     else if (tabItem == "Home")
-      child = HomePage();
+      child = AlertPage();
     else if (tabItem == "Heating") child = Heating();
 
     return Navigator(

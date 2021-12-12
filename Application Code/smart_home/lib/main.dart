@@ -9,6 +9,7 @@ import 'package:smart_home/pages/homePage.dart';
 import 'package:smart_home/pages/moderHome.dart';
 import 'package:smart_home/services/notification.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
