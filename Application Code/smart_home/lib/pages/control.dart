@@ -17,6 +17,7 @@ class _ControlState extends State<Control> {
   Color? color;
   Map<dynamic, dynamic>? colorData;
   Map<dynamic, dynamic>? tempData;
+  Map<dynamic, dynamic>? secData;
 
   @override
   void initState() {
@@ -115,20 +116,34 @@ class _ControlState extends State<Control> {
                                   return CircularProgressIndicator();
                                 }
                               }),
-                          ControlCard(
-                            only: true,
-                            height: constraints.minHeight * 0.15,
-                            width: constraints.minWidth * 0.6,
-                            constraints: constraints,
-                            title: 'Biztonsági rendszer',
-                            switchValue: true,
-                            primaryProp: '',
-                            primaryValue: Text(''),
-                            secondaryValue: '',
-                            secondaryProp: '',
-                            onSwitchChange: () =>
-                                realTimeDatabase().turnSecOnOff(),
-                          ),
+                          StreamBuilder(
+                              stream: realTimeDatabase()
+                                  .databaseReference
+                                  .child('Control/Security/')
+                                  .onValue,
+                              builder: (context, AsyncSnapshot snapshot) {
+                                if (snapshot.hasData) {
+                                  secData = snapshot.data.snapshot.value;
+                                  return ControlCard(
+                                    only: true,
+                                    height: constraints.minHeight * 0.15,
+                                    width: constraints.minWidth * 0.6,
+                                    constraints: constraints,
+                                    title: 'Biztonsági rendszer',
+                                    switchValue: secData!['On'],
+                                    primaryProp: '',
+                                    primaryValue: Text(''),
+                                    secondaryValue: '',
+                                    secondaryProp: '',
+                                    onSwitchChange: () {
+                                      print("Lefutok ám");
+                                      realTimeDatabase().turnSecOnOff();
+                                    },
+                                  );
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              }),
                           SizedBox(
                             height: constraints.maxHeight * 0.01,
                           )

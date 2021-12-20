@@ -219,9 +219,9 @@ class _HeatingState extends State<Heating> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: constraints.maxHeight * 0.06,
-                            )
+                            // SizedBox(
+                            //   height: constraints.maxHeight * 0.06,
+                            // )
                           ],
                         ),
                       );

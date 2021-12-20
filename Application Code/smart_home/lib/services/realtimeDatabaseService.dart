@@ -63,7 +63,7 @@ class realTimeDatabase {
     }
   }
 
-  //tesztelés szempontjából hozzáad egy eseményt a biztonsági részhez az adatbázisban
+  //hozzáad egy eseményt a biztonsági részhez az adatbázisban
   Future addEvent(String time, int currlogIndex) async {
     await databaseReference
         .child('Control/Security/Log')

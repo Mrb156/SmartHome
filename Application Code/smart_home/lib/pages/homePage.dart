@@ -12,19 +12,18 @@ import 'package:smart_home/objects/buttons.dart';
 import 'package:smart_home/objects/cards.dart';
 import 'package:smart_home/pages/blankPage.dart';
 import 'package:smart_home/pages/colorPicker2.dart';
-import 'package:smart_home/pages/home.dart';
 // import 'package:smart_home/services/localNotification.dart';
 import 'package:smart_home/services/realtimeDatabaseService.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class AlertPage extends StatefulWidget {
+  const AlertPage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _AlertPageState createState() => _AlertPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AlertPageState extends State<AlertPage> {
   List secEvents = [];
   bool secState = true;
   int currLengthOfEvents = 0;
@@ -123,38 +122,15 @@ class _HomePageState extends State<HomePage> {
                                             secEvents.reversed.toList();
 
                                         currLengthOfEvents = secEvents.length;
-                                        return StreamBuilder<Object>(
-                                            stream: realTimeDatabase()
-                                                .databaseReference
-                                                .child('notification/status')
-                                                .onValue,
-                                            builder: (context,
-                                                AsyncSnapshot snapshot) {
-                                              if (snapshot.hasData &&
-                                                  snapshot.data!.snapshot
-                                                          .value !=
-                                                      currMotionDetect) {
-                                                currMotionDetect = snapshot
-                                                    .data!.snapshot.value;
-                                                realTimeDatabase().addEvent(
-                                                    DateFormat.yMMMMEEEEd()
-                                                        .add_Hm()
-                                                        .format(DateTime.now()),
-                                                    currLogIndex);
-                                                currLogIndex++;
-                                              }
-                                              return ListView.builder(
-                                                  physics:
-                                                      BouncingScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: secEvents.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return AlertCard(
-                                                        date: secEventsRev[
-                                                            index]);
-                                                  });
+
+                                        return ListView.builder(
+                                            physics: BouncingScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: secEvents.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return AlertCard(
+                                                  date: secEventsRev[index]);
                                             });
                                       } else {
                                         return const Center(

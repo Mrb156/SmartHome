@@ -19,25 +19,6 @@ class MaterialHome extends StatefulWidget {
 
 class _MaterialHomeState extends State<MaterialHome> {
   bool lampIsOn = true;
-  _MaterialHomeState() {
-    AlanVoice.addButton(
-        "710278fdcf1b65a4fe5a195b1209b1322e956eca572e1d8b807a3e2338fdd0dc/stage",
-        buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT);
-    AlanVoice.callbacks.add((command) => _handleCommand(command.data));
-  }
-
-  _handleCommand(Map<String, dynamic> response) {
-    switch (response["command"]) {
-      case "command_1":
-        print('I hear you');
-        break;
-      case "command_2":
-        //do something according to command_2
-        break;
-      default:
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,21 +48,17 @@ class _MaterialHomeState extends State<MaterialHome> {
                       )
                     ],
                   ),
-                  title: 'Hello, Barna!',
+                  title: 'Hello!',
                 ),
                 preferredSize: Size.fromHeight(constraints.maxHeight * 0.15),
               ),
-              body: Stack(children: const [
-                // Positioned(
-                //     bottom: 200,
-                //     right: -400,
-                //     child: Image(image: AssetImage('assets/cloudsunny.png'))),
-                // TabBarView(
-                //   children: [
-                //     Control(),
-                //     AlertPage(),
-                //   ],
-                // ),
+              body: Stack(children: [
+                TabBarView(
+                  children: [
+                    Control(),
+                    AlertPage(),
+                  ],
+                ),
               ]),
             ),
           ),

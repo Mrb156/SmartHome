@@ -91,9 +91,8 @@ class _ControlCardState extends State<ControlCard> {
                     onChanged: (bool value) {
                       setState(() {
                         widget.switchValue = value;
-                        absorbed = !value;
                       });
-                      widget.onSwitchChange;
+                      widget.onSwitchChange();
                     },
                   ),
                 )
