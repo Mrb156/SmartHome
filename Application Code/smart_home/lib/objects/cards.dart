@@ -5,9 +5,7 @@ import 'package:smart_home/colors.dart';
 //a biztonsági értesítések kártyái
 class AlertCard extends StatefulWidget {
   String date;
-  BoxConstraints constraint;
-  AlertCard({Key? key, required this.date, required this.constraint})
-      : super(key: key);
+  AlertCard({Key? key, required this.date}) : super(key: key);
 
   @override
   _AlertCardState createState() => _AlertCardState();
@@ -18,43 +16,8 @@ class _AlertCardState extends State<AlertCard> {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(widget.constraint.maxHeight * 0.03),
-        child: Row(
-          children: [
-            Image(
-              image: AssetImage('assets/alert.png'),
-              height: widget.constraint.maxHeight * 0.1,
-            ),
-            SizedBox(
-              width: widget.constraint.maxWidth * 0.1,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Dátum: ',
-                      style: TextStyle(
-                          fontSize: widget.constraint.maxHeight * 0.04),
-                    ),
-                    Text(widget.date.split(',')[0]),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Idő: ',
-                      style: TextStyle(
-                          fontSize: widget.constraint.maxHeight * 0.04),
-                    ),
-                    Text(widget.date.split(',')[1]),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.all(20),
+        child: Text(widget.date),
       ),
     );
   }
@@ -128,9 +91,8 @@ class _ControlCardState extends State<ControlCard> {
                     onChanged: (bool value) {
                       setState(() {
                         widget.switchValue = value;
-                        absorbed = !value;
                       });
-                      widget.onSwitchChange;
+                      widget.onSwitchChange();
                     },
                   ),
                 )
@@ -242,7 +204,7 @@ class _TempPropCardState extends State<TempPropCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: widget.constraints.maxHeight * 0.17,
+        height: widget.constraints.maxHeight * 0.2,
         width: widget.constraints.maxWidth * 0.4,
         child: Card(
           color: MyColors.background,

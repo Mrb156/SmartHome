@@ -3,13 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smart_home/colors.dart';
-import 'package:smart_home/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_home/pages/homePage.dart';
 import 'package:smart_home/pages/moderHome.dart';
 import 'package:smart_home/services/notification.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:alan_voice/alan_voice.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
