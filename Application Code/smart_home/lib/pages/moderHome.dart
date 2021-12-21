@@ -1,6 +1,4 @@
 // ignore_for_file: file_names
-
-import 'package:alan_voice/alan_voice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home/colors.dart';
@@ -18,8 +16,6 @@ class MaterialHome extends StatefulWidget {
 }
 
 class _MaterialHomeState extends State<MaterialHome> {
-  bool lampIsOn = true;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

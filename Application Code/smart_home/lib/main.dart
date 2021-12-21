@@ -6,7 +6,6 @@ import 'package:smart_home/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_home/pages/homePage.dart';
 import 'package:smart_home/pages/moderHome.dart';
-import 'package:smart_home/services/notification.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
